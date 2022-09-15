@@ -44,3 +44,52 @@ if [[ ${port} != ${NEW_PORT} ]]; then
 fi
 
 echo  "端口修改执行完毕"
+
+echo net.ipv6.conf.all.disable_ipv6=1 > /etc/sysctl.d/disable-ipv6.conf && sysctl -p -f /etc/sysctl.d/disable-ipv6.conf
+if [[ $? -eq 0 ]]; then
+  echo  "关闭IPv6成功"
+fi
+
+sed -i s@/deb.debian.org/@/mirrors.aliyun.com/@g /etc/apt/sources.list && sed -i "s/security.debian.org\/debian-security/mirrors.aliyun.com\/debian-security/g" /etc/apt/sources.list
+if [[ $? -eq 0 ]]; then
+  echo  "apt-get源替换为 阿里云成功"
+fi
+
+apt-get update && apt-get install -y apt-transport-https  ca-certificates curl  gnupg  lsb-release
+if [[ $? -eq 0 ]]; then
+  echo  "安装1完成"
+fi
+
+curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+if [[ $? -eq 0 ]]; then
+  echo  "安装2完成"
+fi
+
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://mirrors.aliyun.com/docker-ce/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+if [[ $? -eq 0 ]]; then
+  echo  "安装3完成"
+fi
+
+apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io --allow-unauthenticated  && echo "docker安装完毕"
+if [[ $? -eq 0 ]]; then
+  echo  "安装4完成【1】"
+else
+  apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io --allow-unauthenticated  && echo "docker安装完毕"
+  if [[ $? -eq 0 ]]; then
+    echo  "安装4完成【2】"
+  else
+     apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io --allow-unauthenticated  && echo "docker安装完毕"
+      if [[ $? -eq 0 ]]; then
+        echo  "安装4完成【3】"
+      fi
+  fi
+fi
+
+
+docker run --name=wxedge --restart=always --privileged --net=host --tmpfs /run --tmpfs /tmp -e REC=false -e LISTEN_ADDR=":7999" -v /data/wxedge_storage:/storage:rw -d registry.cn-chengdu.aliyuncs.com/wzy_111/wxedge
+if [[ $? -eq 0 ]]; then
+   echo  "启动网心云容器成功"
+fi
+
+
+exit 0
