@@ -29,7 +29,7 @@ fi
 
 echo -e "旧SSH端口：[${port}]"
 
-if [[ ${port} != 22 ]]; then
+if [[ ${port} != ${NEW_PORT} ]]; then
     echo "开始修改端口为：[${NEW_PORT}]"
 
 
@@ -38,7 +38,7 @@ if [[ ${port} != 22 ]]; then
     echo -e "删除旧端口配置..."
 	  sed -i "/Port ${port}/d" "${CONF}"
 	  echo -e "添加新端口配置..."
-	  echo -e "\nPort ${new_port}" >> "${CONF}"
+	  echo -e "\nPort ${NEW_PORT}" >> "${CONF}"
     ${SSH_init} restart
     sleep 2s
 fi
