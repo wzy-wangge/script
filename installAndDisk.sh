@@ -91,11 +91,12 @@ echo  "开始挂载硬盘"
 Disk=/dev/sdb
 Mount=/data
 mkdir -p $Mount > /dev/null 2>&1
-mount /dev/sdb $Mount
+mkfs.ext4 $Disk
+mount $Disk $Mount
 uuid=$(lsblk -f $Disk|awk 'NR==2 {print $3}')
 echo UUID=$uuid $Mount 'ext4 defaults 0 0' >> /etc/fstab
 
-docker run --name=wxedge --restart=always --privileged --net=host --tmpfs /run --tmpfs /tmp -e REC=false -e LISTEN_ADDR=":7999" -v /data/wxedge_storage:/storage:rw -d registry.cn-chengdu.aliyuncs.com/wzy_111/wxedge
+docker run --name=wxedge --restart=always --privileged --net=host --tmpfs /run --tmpfs /tmp -e REC=false -e LISTEN_ADDR=":7999" -v /data/wxedge_storage:/storage:rw --log-opt max-size=50m -d registry.cn-chengdu.aliyuncs.com/wzy_111/wxedge
 if [[ $? -eq 0 ]]; then
    echo  "启动网心云容器成功"
 fi
