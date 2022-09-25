@@ -86,7 +86,7 @@ else
 fi
 
 
-docker run --name=wxedge --restart=always --privileged --net=host --tmpfs /run --tmpfs /tmp -e REC=false -e LISTEN_ADDR=":7999" -v /data/wxedge_storage:/storage:rw -d registry.cn-chengdu.aliyuncs.com/wzy_111/wxedge
+docker run --name=wxedge --restart=always --privileged --net=host --tmpfs /run --tmpfs /tmp -e REC=false -e LISTEN_ADDR=":7999" -v /data/wxedge_storage:/storage:rw --log-opt max-size=50m -d registry.cn-chengdu.aliyuncs.com/wzy_111/wxedge
 if [[ $? -eq 0 ]]; then
    echo  "启动网心云容器成功"
 fi
