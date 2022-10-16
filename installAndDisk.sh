@@ -96,7 +96,7 @@ mount $Disk $Mount
 uuid=$(lsblk -f $Disk|awk 'NR==2 {print $3}')
 echo UUID=$uuid $Mount 'ext4 defaults 0 0' >> /etc/fstab
 
-docker run --name=wxedge -e PLACE=CTAA --restart=always --privileged --net=host --tmpfs /run --tmpfs /tmp -e REC=false -e LISTEN_ADDR=":7999" -v /data/wxedge_storage:/storage:rw --log-opt max-size=50m -d registry.cn-chengdu.aliyuncs.com/wzy_111/wxedge
+docker run --name=wxedge -e PLACE=CTAA --restart=always --privileged --net=host --tmpfs /run --tmpfs /tmp -e REC=false -e LISTEN_ADDR=":7999" -v /data/wxedge_storage:/storage:rw --log-opt max-size=50m -d registry.cn-chengdu.aliyuncs.com/wzy_111/wxedge:2.4.1
 if [[ $? -eq 0 ]]; then
    echo  "启动网心云容器成功"
 fi
