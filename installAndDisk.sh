@@ -52,6 +52,7 @@ if [[ $? -eq 0 ]]; then
 fi
 
 sed -i s@/deb.debian.org/@/mirrors.aliyun.com/@g /etc/apt/sources.list && sed -i "s/security.debian.org\/debian-security/mirrors.aliyun.com\/debian-security/g" /etc/apt/sources.list
+sed -i s@/mirrors.ecloud.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list && sed -i "s/mirrors.aliyun.com\/debian-security/mirrors.aliyun.com\/debian-security/g" /etc/apt/sources.list
 if [[ $? -eq 0 ]]; then
   echo  "apt-get源替换为 阿里云成功"
 fi
