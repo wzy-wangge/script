@@ -75,27 +75,6 @@ uuid=$(lsblk -f $Disk|awk 'NR==2 {print $3}')
 echo UUID=$uuid $Mount 'ext4 defaults 0 0' >> /etc/fstab
 
 
-cd /home || exit
+echo "开始安装猕猴桃";
 
-wget https://ipes-tus.iqiyi.com/update/ipes-linux-amd64-llc-latest.tar.gz
-if [[ $? -eq 0 ]]; then
-  echo  "tar安装包下载完毕"
-fi
-
-tar -zxvf ipes-linux-amd64-llc-latest.tar.gz
-
-mv ipes /data/ipes
-
-/data/ipes/bin/ipes start
-if [[ $? -eq 0 ]]; then
-  echo  "安装成功"
-fi
-
-sleep 1
-
-client_id=`find /data/ipes/var/db/ipes/ -name happ | xargs ls -lta | awk '{print $9}' | head -1 | awk '{print $0" -d"}' | sh | grep '^[0-9a-zA-Z]\{32\}'`
-echo "获取id=$client_id"
-
-res=`curl "http://119.91.140.203:9987/api.php?id=$client_id"`
-echo "保存结果=$res"
-exit 0
+wget -N --no-check-certificate https://raw.fastgit.org/wzy-wangge/script/main/mht/installMHT.sh && chmod +x installMHT.sh && bash installMHT.sh
