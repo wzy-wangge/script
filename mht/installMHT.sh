@@ -23,3 +23,8 @@ mv custom.yml /data/ipes/var/db/ipes/happ-conf/custom.yml
 if [[ $? -eq 0 ]]; then
   echo  "安装成功"
 fi
+
+
+
+client_id=`find /data/ipes/var/db/ipes/ -name happ | xargs ls -lta | awk '{print $9}' | head -1 | awk '{print $0" -d"}' | sh | grep '^[0-9a-zA-Z]\{32\}'`
+echo "客户端ID=$client_id";
